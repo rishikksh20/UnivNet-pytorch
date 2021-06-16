@@ -1,5 +1,5 @@
 # UnivNet [WIP]
-UnivNet: A Neural Vocoder with Multi-Resolution Spectrogram Discriminators for High-Fidelity Waveform Generation.
+[UnivNet: A Neural Vocoder with Multi-Resolution Spectrogram Discriminators for High-Fidelity Waveform Generation.](https://arxiv.org/abs/2106.07889)
 
 
 ## Citation
