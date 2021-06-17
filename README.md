@@ -16,3 +16,7 @@ python train.py --config config_c32.json
       primaryClass={cs.LG}
 }
 ```
+
+## References:
+* [Hi-Fi-GAN repo](https://github.com/jik876/hifi-gan)
+* [LVCNet repo](https://github.com/ZENGZHEN-TTS/LVCNet)
