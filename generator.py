@@ -1,26 +1,28 @@
 import torch
 import logging
 from modules import LVCBlock
+import torch.nn.functional as F
+
+LRELU_SLOPE = 0.1
 
 class UnivNet(torch.nn.Module):
     """Parallel WaveGAN Generator module."""
 
-    def __init__(self,
-                 in_channels=64,
-                 out_channels=1,
-                 inner_channels=32,
-                 cond_channels=80,
-                 cond_hop_length=256,
-                 upsample_ratios=[8, 8, 4],
-                 lvc_layers_each_block=4,
-                 lvc_kernel_size=3,
-                 kpnet_hidden_channels=64,
-                 kpnet_conv_size=3,
-                 dropout=0.0,
-                 use_weight_norm=True,
-                 ):
+    def __init__(self, h, use_weight_norm=True):
 
         super().__init__()
+        in_channels = h.cond_in_channels
+        out_channels = h.out_channels
+        inner_channels = h.cg_channels
+        cond_channels = h.num_mels
+        upsample_ratios = h.upsample_rates
+        lvc_layers_each_block = h.num_lvc_blocks
+        lvc_kernel_size = h.lvc_kernels
+        kpnet_hidden_channels = h.lvc_hidden_channels
+        kpnet_conv_size = h.lvc_conv_size
+        dropout = h.dropout
+
+
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.cond_channels = cond_channels
@@ -51,10 +53,8 @@ class UnivNet(torch.nn.Module):
 
         # define output layers
         self.last_conv_layers = torch.nn.ModuleList([
-            torch.nn.LeakyReLU(inplace=True),
             torch.nn.Conv1d(inner_channels, out_channels, kernel_size=7, padding=(7 - 1) // 2,
                                         dilation=1, bias=True),
-            torch.nn.Tanh(),
 
         ])
 
@@ -78,8 +78,9 @@ class UnivNet(torch.nn.Module):
 
         # apply final layers
         for f in self.last_conv_layers:
+            x = F.leaky_relu(x, LRELU_SLOPE)
             x = f(x)
-
+        x = torch.tanh(x)
         return x
 
     def remove_weight_norm(self):
