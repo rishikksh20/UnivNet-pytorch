@@ -1,7 +1,10 @@
-# UnivNet [WIP]
+# UnivNet
 [UnivNet: A Neural Vocoder with Multi-Resolution Spectrogram Discriminators for High-Fidelity Waveform Generation.](https://arxiv.org/abs/2106.07889)
 
-
+## Training
+```
+python train.py --config config_c32.json
+```
 ## Citation
 ```
 @misc{seo2021controlling,
