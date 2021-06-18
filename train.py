@@ -126,10 +126,11 @@ def train(rank, a, h):
 
             y_g_hat = generator(z, x)
 
+            y_g_hat_mel = mel_spectrogram(y_g_hat.squeeze(1), h.n_fft, h.num_mels, h.sampling_rate, h.hop_size,
+                                          h.win_size,
+                                          h.fmin, h.fmax_for_loss)
+
             if steps > h.disc_start_step:
-                y_g_hat_mel = mel_spectrogram(y_g_hat.squeeze(1), h.n_fft, h.num_mels, h.sampling_rate, h.hop_size,
-                                              h.win_size,
-                                              h.fmin, h.fmax_for_loss)
 
                 optim_d.zero_grad()
 
@@ -146,8 +147,8 @@ def train(rank, a, h):
                 loss_disc_all.backward()
                 optim_d.step()
 
-                # Generator
-                optim_g.zero_grad()
+            # Generator
+            optim_g.zero_grad()
 
             # L1 Mel-Spectrogram Loss
             #loss_mel = F.l1_loss(y_mel, y_g_hat_mel) * 45
