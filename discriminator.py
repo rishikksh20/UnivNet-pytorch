@@ -34,6 +34,7 @@ class SpecDiscriminator(nn.Module):
 
         fmap = []
         with torch.no_grad():
+            y = y.squeeze(1)
             y = stft(y, self.fft_size, self.shift_size, self.win_length, self.window.to(y.get_device()))
         y = y.unsqueeze(1)
         for i, d in enumerate(self.discriminators):
@@ -54,7 +55,7 @@ class MultiResSpecDiscriminator(torch.nn.Module):
                  win_lengths=[600, 1200, 240],
                  window="hann_window"):
 
-
+        super(MultiResSpecDiscriminator, self).__init__()
         self.discriminators = nn.ModuleList([
             SpecDiscriminator(fft_sizes[0], hop_sizes[0], win_lengths[0], window),
             SpecDiscriminator(fft_sizes[1], hop_sizes[1], win_lengths[1], window),
