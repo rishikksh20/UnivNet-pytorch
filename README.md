@@ -17,6 +17,9 @@ python train.py --config config_c32.json
 }
 ```
 
+## Note
+* For more complete and end to end Voice cloning or Text to Speech (TTS) toolbox please visit [Deepsync Technologies](https://deepsync.co/).
+
 ## References:
 * [Hi-Fi-GAN repo](https://github.com/jik876/hifi-gan)
 * [LVCNet repo](https://github.com/ZENGZHEN-TTS/LVCNet)
